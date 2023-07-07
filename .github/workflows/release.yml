@@ -15,7 +15,30 @@ on:
     tags:
       - 'v*'
 jobs:
+  check-prerelease-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Run pre-release actions
+        run: |
+          make update_release_schema
+          make generate
+      - 
+        name: Check if there are changes
+        id: changes
+        uses: UnicornGlobal/has-changes-action@v1.0.11
+      - 
+        name: Fail on changes
+        if: steps.changes.output.changed == 1
+        run: |
+          echo "You have to do pre-release actions before releasing. Exiting..."
+          exit 1
+
   goreleaser:
+    needs: [check-prerelease-actions]
     runs-on: ubuntu-latest
     steps:
       -
