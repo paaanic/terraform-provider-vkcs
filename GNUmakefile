@@ -4,6 +4,9 @@ PKG_NAME=vkcs
 
 default: build
 
+update_release_schema:
+	go run helpers/schema-api/main.go -export .release/provider-schema.json
+
 generate:
 	go generate ./...
 
@@ -87,4 +90,4 @@ lint:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.42.1
 	golangci-lint run ./...
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck test-compile website website-test lint
+.PHONY: build test testacc vet fmt fmtcheck errcheck test-compile website website-test lint update_release_schema
